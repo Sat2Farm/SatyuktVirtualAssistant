@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import pdfplumber
 import tempfile
+import random
 # Import for Google Gemini
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -24,12 +25,19 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Load Google API Key from environment variable
-google_api_key = os.getenv("GOOGLE_API_KEY")
+# Load multiple Google API Keys from environment variables
+google_api_keys = [
+    os.getenv("GOOGLE_API_KEY_1"),
+    os.getenv("GOOGLE_API_KEY_2"),
+    os.getenv("GOOGLE_API_KEY_3"),
+    os.getenv("GOOGLE_API_KEY_4")
+]
+# Filter out any None values (in case some keys are not set)
+google_api_keys = [key for key in google_api_keys if key]
 
-if not google_api_key:
-    st.error("❌ GOOGLE_API_KEY not found. Please set it in your .env file.")
-    st.stop()  # Stop the app if API key is missing
+if not google_api_keys:
+    st.error("❌ No valid GOOGLE_API_KEYs found. Please set at least one in your .env file.")
+    st.stop()  # Stop the app if no API keys are found
 
 # Custom CSS for agriculture theme
 st.markdown(
@@ -202,7 +210,6 @@ st.markdown(
      .css-1d391kg {
          background: linear-gradient(180deg, #4CAF50 0%, #2E7D32 100%);
      }
-  
 
     .css-1d391kg .css-1v0mbdj {
         color: green;
@@ -222,9 +229,9 @@ st.markdown(
     }
 
     .language-label {
-    color: red;
-    font-weight: 600;
-    margin-bottom: 5px;
+        color: red;
+        font-weight: 600;
+        margin-bottom: 5px;
     }
 
     </style>
@@ -240,7 +247,7 @@ with st.sidebar:
     languages = [
         "English", "हिंदी", "ಕನ್ನಡ", "தமிழ்", "తెలుగు", "বাংলা", "मराठी", "ગુજરાતી", "ਪੰਜਾਬੀ"
     ]
-    selected_lang = st.selectbox("", languages, key="language_selector")
+    selected_lang = st.selectbox("Select Language", languages, key="language_selector")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -324,14 +331,13 @@ contact_messages = {
     "ಕನ್ನಡ": "🤝 ನಮ್ಮ ಕೃಷಿ ತಜ್ಞರೊಂದಿಗೆ ನಿಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸುತ್ತೇನೆ! ವಿಶೇಷ ಸಹಾಯಕ್ಕಾಗಿ support@satyukt.com ಗೆ ಸಂಪರ್ಕಿಸಿ ಅಥವಾ 8970700045 | 7019992797 ಗೆ ಕರೆ ಮಾಡಿ.",
     "தமிழ்": "🤝 எங்கள் விவசாய நிபுணர்களுடன் உங்களை இணைக்கிறேன்! சிறப்பு உதவிக்கு support@satyukt.com ஐ தொடர்பு கொள்ளவும் அல்லது 8970700045 | 7019992797 ஐ அழைக்கவும்.",
     "తెలుగు": "🤝 మా వ్యవసాయ నిపుణులతో మిమ్మల్ని కనెక్ట్ చేస్తాను! ప్రత్యేక సహాయం కోసం దయచేసి support@satyukt.com ని సంప్రదించండి లేదా 8970700045 | 7019992797 కు కాల్ చేయండి.",
-    "বাংলা": "🤝 আমি আপনাকে আমাদের কৃষি বিশেষজ্ঞদের সাথে সংযুক্ত করব! বিশেষ সহায়তার জন্য অনুগ্রহ করে support@satyukt.com এ যোগাযোগ করুন অথবা 8970700045 | 7019992797 নম্বরে কল করুন।",
+    "বাংলা": "🤝 আমি আপনাকে আমাদের কৃষি বিশ৻জ্ঞদের সাথে সংযুক্ত করব! বিশেষ সহায়তার জন্য অনুগ্রহ করে support@satyukt.com এ যোগাযোগ করুন অথবা 8970700045 | 7019992797 নম্বরে কল করুন।",
     "मराठी": "🤝 मी तुम्हाला आमच्या कृषी तज्ञांशी जोडतो! विशेष मदतीसाठी कृपया support@satyukt.com वर संपर्क साधा किंवा 8970700045 | 7019992797 वर कॉल करा.",
     "ગુજરાતી": "🤝 હું તમને અમારા કૃષિ નિષ્ણાતો સાથે જોડું છું! વિશેષ સહાયતા માટે કૃપા કરીને support@satyukt.com નો સંપર્ક કરો અથવા 8970700045 | 7019992797 પર કૉલ કરો.",
     "ਪੰਜਾਬੀ": "🤝 ਮੈਂ ਤੁਹਾਨੂੰ ਸਾਡੇ ਖੇਤੀਬਾੜੀ ਮਾਹਿਰਾਂ ਨਾਲ ਜੋੜਦਾ ਹਾਂ! ਵਿਸ਼ੇਸ਼ ਸਹਾਇਤਾ ਲਈ ਕਿਰਪਾ ਕਰਕੇ support@satyukt.com 'ਤੇ ਸੰਪਰਕ ਕਰੋ ਜਾਂ 8970700045 | 7019992797 'ਤੇ ਕਾਲ ਕਰੋ।"
 }
 
 # Enhanced prompt template with language support
-# The {selected_lang} will be dynamically inserted from the Streamlit selectbox
 prompt = ChatPromptTemplate.from_template(
     f"""
 You are a helpful, multilingual AI assistant specializing in agriculture. Answer questions using only the information provided in the PDF context below.
@@ -351,14 +357,12 @@ You are a helpful, multilingual AI assistant specializing in agriculture. Answer
     """
 )
 
-# Initialize the Gemini LLM for chat/generation
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash-latest", google_api_key=google_api_key)
-
+# Initialize the Gemini LLM for chat/generation with a random API key
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash-latest", google_api_key=random.choice(google_api_keys))
 
 def is_out_of_context(answer, current_selected_lang):
     # This function checks if the answer matches the pre-defined contact message
     # or contains keywords indicating out-of-context response.
-    # The primary control is still via prompt engineering.
     contact_message_template = contact_messages.get(current_selected_lang, contact_messages['English']).lower()
 
     # Check for direct match (case-insensitive)
@@ -372,10 +376,8 @@ def is_out_of_context(answer, current_selected_lang):
         "जानकारी उपलब्ध नहीं", "मुझे नहीं पता", "संदर्भ में नहीं",  # Hindi examples
         "ಮಾಹಿತಿ ಲಭ್ಯವಿಲ್ಲ", "ನನಗೆ ಗೊತ್ತಿಲ್ಲ",  # Kannada examples
         "தகவல் இல்லை", "எனக்குத் தெரியாது",  # Tamil examples
-        # Add more keywords for other languages if needed
     ]
     return any(k in answer.lower() for k in keywords)
-
 
 def extract_text_with_pdfplumber(pdf_path):
     text = ""
@@ -390,8 +392,7 @@ def extract_text_with_pdfplumber(pdf_path):
         return ""
     return text
 
-
-def initialize_vector_db(pdf_file, api_key):
+def initialize_vector_db(pdf_file, api_keys):
     # Only initialize if vector_store is not already in session_state
     if "vector_store" not in st.session_state:
         try:
@@ -429,10 +430,10 @@ def initialize_vector_db(pdf_file, api_key):
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=300)
             chunks = text_splitter.split_documents([doc])
 
-            # Initialize Gemini Embeddings with the correct model name
+            # Initialize Gemini Embeddings with a random API key
             st.session_state.embeddings = GoogleGenerativeAIEmbeddings(
-                model="models/embedding-001",  # Crucial fix for embedding model
-                google_api_key=api_key
+                model="models/embedding-001",
+                google_api_key=random.choice(api_keys)
             )
 
             # Create the vector store from the document chunks and embeddings
@@ -449,7 +450,6 @@ def initialize_vector_db(pdf_file, api_key):
             return False
     return True  # Already initialized
 
-
 # Initialize chat history
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
@@ -465,16 +465,15 @@ if os.path.exists(default_pdf_path):
             with open(self.path, "rb") as f:
                 return f.read()
 
-
     pdf_input_from_user = DummyFile(default_pdf_path)
 
-    if initialize_vector_db(pdf_input_from_user, google_api_key):
+    if initialize_vector_db(pdf_input_from_user, google_api_keys):
         if "initial_greeting_shown" not in st.session_state:
             st.success(
                 "✅ Hi there! 👋 Satyukt Virtual Assistant is ready to assist you! Ask me anything about agriculture, farming, or our services.")
             st.session_state.initial_greeting_shown = True
     else:
-        st.error(f"❌ Could not initialize assistant with '{default_pdf_path}'. Check PDF content or API key.")
+        st.error(f"❌ Could not initialize assistant with '{default_pdf_path}'. Check PDF content or API keys.")
 else:
     st.error(
         f"❌ PDF file '{default_pdf_path}' not found in the project directory. Please ensure it's in the same directory as your Streamlit app.")
@@ -484,7 +483,6 @@ if "vector_store" in st.session_state:  # Only show chat if vector store is init
     st.markdown("### 💬 Chat with Satyukt Virtual Assistant")
 
     # Display chat history with enhanced styling
-    # Use a unique key for the chat container to ensure it re-renders
     chat_container_key = f"chat_container_{len(st.session_state.chat_history)}"
     st.markdown(f'<div class="chat-container" id="{chat_container_key}">', unsafe_allow_html=True)
 
@@ -498,7 +496,7 @@ if "vector_store" in st.session_state:  # Only show chat if vector store is init
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # JavaScript to scroll chat container to bottom (needs to be injected)
+    # JavaScript to scroll chat container to bottom
     st.markdown(
         f"""
         <script>
@@ -521,7 +519,7 @@ if "vector_store" in st.session_state:  # Only show chat if vector store is init
 
     send_button = st.button("Send 🚀", key="send_btn")
 
-    # Handle ONLY Send button click (not automatic)
+    # Handle ONLY Send button click
     if send_button and user_prompt:
         if user_prompt.strip():
             # Add user message to chat history
@@ -534,20 +532,16 @@ if "vector_store" in st.session_state:  # Only show chat if vector store is init
                     document_chain = create_stuff_documents_chain(llm, prompt)
 
                     # Create retriever from the vector store
-                    # Use a smaller k for retrieval if the PDF is short or if answers are very direct
                     retriever = st.session_state.vector_store.as_retriever(search_kwargs={"k": 3})
 
                     # Create the retrieval chain
                     retrieval_chain = create_retrieval_chain(retriever, document_chain)
 
                     # Invoke the retrieval chain with the user's prompt
-                    # The prompt template already includes {selected_lang}
                     response = retrieval_chain.invoke({'input': user_prompt})
                     answer = response['answer']
 
-                    # Check for out-of-context response using the helper function
-                    # and apply the specific contact message if needed.
-                    # The prompt engineering should ideally handle this directly.
+                    # Check for out-of-context response
                     if is_out_of_context(answer, selected_lang):
                         answer = contact_messages.get(selected_lang, contact_messages['English'])
 
@@ -559,7 +553,7 @@ if "vector_store" in st.session_state:  # Only show chat if vector store is init
                     st.session_state.chat_history.append({"role": "assistant", "content": error_msg})
 
                 # Clear input and refresh the app to show new messages
-                st.rerun()  # Use st.rerun() instead of st.experimental_rerun() for newer Streamlit versions
+                st.rerun()
 
         else:
             st.warning("⚠️ Please enter a question before sending.")
@@ -569,7 +563,7 @@ if "vector_store" in st.session_state:  # Only show chat if vector store is init
 
 else:
     st.info(
-        "🔄 Initializing Satyukt Virtual Assistant... Please wait a moment.")  # Message if vector_store is not yet initialized
+        "🔄 Initializing Satyukt Virtual Assistant... Please wait a moment.")
 
 # Footer
 st.markdown("---")
