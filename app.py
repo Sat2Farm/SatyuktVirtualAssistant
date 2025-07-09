@@ -570,7 +570,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style="text-align: center; color: #666; padding: 20px;">
-        <p>🌾 <strong>AgroAI - Smart Farming Assistant</strong> | Powered by Satellite Intelligence & AI</p>
+        <p>🌾 <strong>SatyuktAI - Smart Farming Assistant</strong> | Powered by Satellite Intelligence & AI</p>
         <p>Serving Farmers, Agri-banks, Insurers & Governments across India 🇮🇳</p>
     </div>
     """,
