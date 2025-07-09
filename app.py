@@ -263,8 +263,8 @@ with st.sidebar:
 
     st.markdown("---")
     st.markdown("### 📞 Contact")
-    st.markdown("📧 support@satyukt.com")
-    st.markdown("📱 8970700045 | 7019992797")
+    st.markdown("📧 contact@satyukt.com")
+    st.markdown("📱 +91‑8970095700")
 
 # Main welcome container
 st.markdown(
