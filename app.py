@@ -13,7 +13,6 @@ from langchain_community.vectorstores import DocArrayInMemorySearch
 from langchain_core.documents import Document
 from dotenv import load_dotenv
 import time
-
 # Load environment variables from .env file
 load_dotenv()
 
