@@ -24,7 +24,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Load multiple Google API Keys from environment variables
+
 google_api_keys = [
     os.getenv("GOOGLE_API_KEY_1"),
     os.getenv("GOOGLE_API_KEY_2"),
