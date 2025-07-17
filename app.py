@@ -274,7 +274,7 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("### 📞 Contact")
     st.markdown("📧 contact@satyukt.com")
-    st.markdown("📱  +91-8970095700")
+    st.markdown("📱 +91 8970095700")
 
 # Main welcome container
 st.markdown(
@@ -336,15 +336,15 @@ with col4:
 
 # Dictionary for contact messages in different languages
 contact_messages = {
-    "English": "🤝 Let me connect you with our agricultural experts! Please contact contact@satyukt.com or call  +91-8970095700 for specialized assistance.",
-    "हिंदी": "🤝 मैं आपको हमारे कृषि विशेषज्ञों से जोड़ता हूँ! विशेष सहायता के लिए कृपया contact@satyukt.com पर संपर्क करें या  +91-8970095700 पर कॉल करें।",
-    "ಕನ್ನಡ": "🤝 ನಮ್ಮ ಕೃಷಿ ತಜ್ಞರೊಂದಿಗೆ ನಿಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸುತ್ತೇನೆ! ವಿಶೇಷ ಸಹಾಯಕ್ಕಾಗಿ contact@satyukt.com ಗೆ ಸಂಪರ್ಕಿಸಿ ಅಥವಾ  +91-8970095700 ಗೆ ಕರೆ ಮಾಡಿ.",
-    "தமிழ்": "🤝 எங்கள் விவசாய நிபுணர்களுடன் உங்களை இணைக்கிறேன்! சிறப்பு உதவிக்கு contact@satyukt.com ஐ தொடர்பு கொள்ளவும் அல்லது  +91-8970095700 ஐ அழைக்கவும்.",
-    "తెలుగు": "🤝 మా వ్యవసాయ నిపుణులతో మిమ్మల్ని కనెక్ట్ చేస్తాను! ప్రత్యేక సహాయం కోసం దయచేసి contact@satyukt.com ని సంప్రదించండి లేదా  +91-8970095700 కు కాల్ చేయండి.",
-    "বাংলা": "🤝 আমি আপনাকে আমাদের কৃষি বিশেষজ্ঞদের সাথে সংযুক্ত করব! বিশেষ সহায়তার জন্য অনুগ্রহ করে contact@satyukt.com এ যোগাযোগ করুন অথবা  +91-8970095700 নম্বরে কল করুন।",
-    "मराठी": "🤝 मी तुम्हाला आमच्या कृषी तज्ञांशी जोडतो! विशेष मदतीसाठी कृपया contact@satyukt.com वर संपर्क साधा किंवा  +91-8970095700 वर कॉल करा.",
-    "ગુજરાતી": "🤝 હું તમને અમારા કૃષિ નિષ્ણાતો સાથે જોડું છું! વિશેષ સહાયતા માટે કૃપા કરીને contact@satyukt.com નો સંપર્ક કરો અથવા  +91-8970095700 પર કૉલ કરો.",
-    "ਪੰਜਾਬੀ": "🤝 ਮੈਂ ਤੁਹਾਨੂੰ ਸਾਡੇ ਖੇਤੀਬਾੜੀ ਮਾਹਿਰਾਂ ਨਾਲ ਜੋੜਦਾ ਹਾਂ! ਵਿਸ਼ੇਸ਼ ਸਹਾਇਤਾ ਲਈ ਕਿਰਪਾ ਕਰਕੇ contact@satyukt.com 'ਤੇ ਸੰਪਰਕ ਕਰੋ ਜਾਂ  +91-8970095700 'ਤੇ ਕਾਲ ਕਰੋ।"
+    "English": "🤝 Let me connect you with our agricultural experts! Please contact contact@satyukt.com or call +91 8970095700 for specialized assistance.",
+    "हिंदी": "🤝 मैं आपको हमारे कृषि विशेषज्ञों से जोड़ता हूँ! विशेष सहायता के लिए कृपया contact@satyukt.com पर संपर्क करें या +91 8970095700 पर कॉल करें।",
+    "ಕನ್ನಡ": "🤝 ನಮ್ಮ ಕೃಷಿ ತಜ್ಞರೊಂದಿಗೆ ನಿಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸುತ್ತೇನೆ! ವಿಶೇಷ ಸಹಾಯಕ್ಕಾಗಿ contact@satyukt.com ಗೆ ಸಂಪರ್ಕಿಸಿ ಅಥವಾ +91 8970095700 ಗೆ ಕರೆ ಮಾಡಿ.",
+    "தமிழ்": "🤝 எங்கள் விவசாய நிபுணர்களுடன் உங்களை இணைக்கிறேன்! சிறப்பு உதவிக்கு contact@satyukt.com ஐ தொடர்பு கொள்ளவும் அல்லது +91 8970095700 ஐ அழைக்கவும்.",
+    "తెలుగు": "🤝 మా వ్యవసాయ నిపుణులతో మిమ్మల్ని కనెక్ట్ చేస్తాను! ప్రత్యేక సహాయం కోసం దయచేసి contact@satyukt.com ని సంప్రదించండి లేదా +91 8970095700 కు కాల్ చేయండి.",
+    "বাংলা": "🤝 আমি আপনাকে আমাদের কৃষি বিশেষজ্ঞদের সাথে সংযুক্ত করব! বিশেষ সহায়তার জন্য অনুগ্রহ করে contact@satyukt.com এ যোগাযোগ করুন অথবা +91 8970095700 নম্বরে কল করুন।",
+    "मराठी": "🤝 मी तुम्हाला आमच्या कृषी तज्ञांशी जोडतो! विशेष मदतीसाठी कृपया contact@satyukt.com वर संपर्क साधा किंवा +91 8970095700 वर कॉल करा.",
+    "ગુજરાતી": "🤝 હું તમને અમારા કૃષિ નિષ્ણાતો સાથે જોડું છું! વિશેષ સહાયતા માટે કૃપા કરીને contact@satyukt.com નો સંપર્ક કરો અથવા +91 8970095700 પર કૉલ કરો.",
+    "ਪੰਜਾਬੀ": "🤝 ਮੈਂ ਤੁਹਾਨੂੰ ਸਾਡੇ ਖੇਤੀਬਾੜੀ ਮਾਹਿਰਾਂ ਨਾਲ ਜੋੜਦਾ ਹਾਂ! ਵਿਸ਼ੇਸ਼ ਸਹਾਇਤਾ ਲਈ ਕਿਰਪਾ ਕਰਕੇ contact@satyukt.com 'ਤੇ ਸੰਪਰਕ ਕਰੋ ਜਾਂ +91 8970095700 'ਤੇ ਕਾਲ ਕਰੋ।"
 }
 
 # Enhanced prompt template with language support
@@ -367,12 +367,13 @@ You are a helpful, multilingual AI assistant specializing in agriculture. Answer
     """
 )
 
+
 # Function to safely initialize LLM with error handling
 @st.cache_resource
 def get_llm():
     try:
         return ChatGoogleGenerativeAI(
-            model="gemini-1.5-flash-latest", 
+            model="gemini-1.5-flash-latest",
             google_api_key=random.choice(google_api_keys),
             temperature=0.7
         )
@@ -380,8 +381,10 @@ def get_llm():
         st.error(f"Error initializing LLM: {e}")
         return None
 
+
 # Initialize the Gemini LLM for chat/generation with a random API key
 llm = get_llm()
+
 
 def is_out_of_context(answer, current_selected_lang):
     # This function checks if the answer matches the pre-defined contact message
@@ -402,6 +405,7 @@ def is_out_of_context(answer, current_selected_lang):
     ]
     return any(k in answer.lower() for k in keywords)
 
+
 def extract_text_with_pdfplumber(pdf_path):
     text = ""
     try:
@@ -414,6 +418,7 @@ def extract_text_with_pdfplumber(pdf_path):
         st.error(f"Error extracting text from PDF: {e}")
         return ""
     return text
+
 
 def initialize_vector_db(pdf_file, api_keys):
     # Only initialize if vector_store is not already in session_state
@@ -483,9 +488,14 @@ def initialize_vector_db(pdf_file, api_keys):
             return False
     return True  # Already initialized
 
+
 # Initialize chat history
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
+
+# Initialize message sent flag
+if "message_sent" not in st.session_state:
+    st.session_state.message_sent = False
 
 # Auto-load PDF for RAG context
 default_pdf_path = "SatyuktQueries.pdf"
@@ -497,6 +507,7 @@ if os.path.exists(default_pdf_path):
         def read(self):
             with open(self.path, "rb") as f:
                 return f.read()
+
 
     pdf_input_from_user = DummyFile(default_pdf_path)
 
@@ -542,57 +553,61 @@ if "vector_store" in st.session_state and llm:  # Only show chat if vector store
         unsafe_allow_html=True
     )
 
-    # Input section
+    # Input section with form for Enter key support
     st.markdown("### Ask your question:")
-    user_prompt = st.text_input(
-        "Type your question here...",
-        placeholder=f"Ask me anything in {selected_lang}... 🌾",
-        key="user_input"
-    )
 
-    send_button = st.button("Send 🚀", key="send_btn")
+    # Create a form to handle Enter key submission
+    with st.form(key='chat_form', clear_on_submit=True):
+        user_prompt = st.text_input(
+            "Type your question here...",
+            placeholder=f"Ask me anything in {selected_lang}... 🌾",
+            key="user_input_form"
+        )
 
-    # Handle ONLY Send button click
-    if send_button and user_prompt:
-        if user_prompt.strip():
-            # Add user message to chat history
-            st.session_state.chat_history.append({"role": "user", "content": user_prompt})
+        # Form submit button (this handles Enter key)
+        submitted = st.form_submit_button("Send 🚀")
 
-            # Show thinking animation
-            with st.spinner("🤔 Satyukt is thinking..."):
-                try:
-                    # Create the document chain
-                    document_chain = create_stuff_documents_chain(llm, prompt)
+        # Handle form submission (Enter key or button click)
+        if submitted and user_prompt:
+            if user_prompt.strip():
+                # Add user message to chat history
+                st.session_state.chat_history.append({"role": "user", "content": user_prompt})
 
-                    # Create retriever from the vector store
-                    retriever = st.session_state.vector_store.as_retriever(search_kwargs={"k": 3})
+                # Show thinking animation
+                with st.spinner("🤔 Satyukt is thinking..."):
+                    try:
+                        # Create the document chain
+                        document_chain = create_stuff_documents_chain(llm, prompt)
 
-                    # Create the retrieval chain
-                    retrieval_chain = create_retrieval_chain(retriever, document_chain)
+                        # Create retriever from the vector store
+                        retriever = st.session_state.vector_store.as_retriever(search_kwargs={"k": 3})
 
-                    # Invoke the retrieval chain with the user's prompt
-                    response = retrieval_chain.invoke({'input': user_prompt})
-                    answer = response['answer']
+                        # Create the retrieval chain
+                        retrieval_chain = create_retrieval_chain(retriever, document_chain)
 
-                    # Check for out-of-context response
-                    if is_out_of_context(answer, selected_lang):
-                        answer = contact_messages.get(selected_lang, contact_messages['English'])
+                        # Invoke the retrieval chain with the user's prompt
+                        response = retrieval_chain.invoke({'input': user_prompt})
+                        answer = response['answer']
 
-                    # Add AI response to chat history
-                    st.session_state.chat_history.append({"role": "assistant", "content": answer})
+                        # Check for out-of-context response
+                        if is_out_of_context(answer, selected_lang):
+                            answer = contact_messages.get(selected_lang, contact_messages['English'])
 
-                except Exception as e:
-                    error_msg = f"🔧 Sorry, I encountered a technical issue: {e}. Please try again or contact our support team."
-                    st.session_state.chat_history.append({"role": "assistant", "content": error_msg})
+                        # Add AI response to chat history
+                        st.session_state.chat_history.append({"role": "assistant", "content": answer})
 
-                # Clear input and refresh the app to show new messages
-                st.rerun()
+                    except Exception as e:
+                        error_msg = f"🔧 Sorry, I encountered a technical issue: {e}. Please try again or contact our support team."
+                        st.session_state.chat_history.append({"role": "assistant", "content": error_msg})
 
-        else:
+                    # Refresh the app to show new messages
+                    st.rerun()
+
+            else:
+                st.warning("⚠️ Please enter a question before sending.")
+
+        elif submitted and not user_prompt:
             st.warning("⚠️ Please enter a question before sending.")
-
-    elif send_button and not user_prompt:
-        st.warning("⚠️ Please enter a question before sending.")
 
 else:
     st.info(
