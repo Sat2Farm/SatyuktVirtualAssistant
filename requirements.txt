@@ -18,10 +18,9 @@ langchain-core
 langchain-community
 langchain-groq
 langchain-huggingface
-python-dotenv
-pdfplumber
 sentence-transformers
 torch
 docarray
 nest_asyncio
-
+pdfplumber
+transformers
