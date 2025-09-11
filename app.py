@@ -2,10 +2,10 @@ import streamlit as st
 import os
 import pdfplumber
 import tempfile
+import random
 import asyncio
 import sys
 import nest_asyncio
-import torch # Added this import for the embeddings fix
 
 # Fix for event loop issues in Streamlit
 if sys.platform == "win32":
@@ -14,9 +14,8 @@ if sys.platform == "win32":
 # Allow nested event loops (fixes the main issue)
 nest_asyncio.apply()
 
-# Import for Groq and HuggingFace
-from langchain_groq import ChatGroq
-from langchain_huggingface import HuggingFaceEmbeddings
+# Import for Google Gemini
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
@@ -25,12 +24,20 @@ from langchain_community.vectorstores import DocArrayInMemorySearch
 from langchain_core.documents import Document
 import time
 
-# Direct Groq API Key (Replace with your actual Groq API Key)
-GROQ_API_KEY = "YOUR_GROQ_API_KEY_HERE"  # Replace this with your actual Groq API Key
+# Direct API Keys (Replace these with your actual Google API Keys)
+google_api_keys = [
+    "AIzaSyBxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  # Replace with your actual API Key 1
+    "AIzaSyCxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  # Replace with your actual API Key 2
+    "AIzaSyDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  # Replace with your actual API Key 3
+    "AIzaSyExxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"   # Replace with your actual API Key 4
+]
 
-if not GROQ_API_KEY or GROQ_API_KEY == "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":
-    st.error("❌ No valid GROQ_API_KEY found. Please replace the placeholder API key with your actual key.")
-    st.stop()  # Stop the app if no API key is found
+# Filter out any placeholder values (in case some keys are not replaced)
+google_api_keys = [key for key in google_api_keys if not key.startswith("AIzaSyBxxx")]
+
+if not google_api_keys:
+    st.error("❌ No valid GOOGLE_API_KEYs found. Please replace the placeholder API keys with your actual keys.")
+    st.stop()  # Stop the app if no API keys are found
 
 # Page configuration
 st.set_page_config(
@@ -207,10 +214,10 @@ st.markdown(
         font-weight: 600;
     }
 
-    /* Sidebar styling */
-    .css-1d391kg {
-        background: linear-gradient(180deg, #4CAF50 0%, #2E7D32 100%);
-    }
+     /* Sidebar styling */
+     .css-1d391kg {
+         background: linear-gradient(180deg, #4CAF50 0%, #2E7D32 100%);
+     }
 
     .css-1d391kg .css-1v0mbdj {
         color: green;
@@ -358,52 +365,24 @@ You are a helpful, multilingual AI assistant specializing in agriculture. Answer
     """
 )
 
-# Initialize session state for caching
-if "llm_initialized" not in st.session_state:
-    st.session_state.llm_initialized = False
-    
-if "embeddings_initialized" not in st.session_state:
-    st.session_state.embeddings_initialized = False
 
 # Function to safely initialize LLM with error handling
+@st.cache_resource
 def get_llm():
-    if not st.session_state.llm_initialized:
-        try:
-            st.session_state.llm = ChatGroq(
-                model="llama3-70b-8192", # Updated Groq model
-                api_key=GROQ_API_KEY,
-                temperature=0.7,
-                max_tokens=1000
-            )
-            st.session_state.llm_initialized = True
-        except Exception as e:
-            st.error(f"Error initializing Groq LLM: {e}")
-            return None
-    
-    return st.session_state.llm if st.session_state.llm_initialized else None
+    try:
+        return ChatGoogleGenerativeAI(
+            model="gemini-1.5-flash-latest",
+            google_api_key=random.choice(google_api_keys),
+            temperature=0.7
+        )
+    except Exception as e:
+        st.error(f"Error initializing LLM: {e}")
+        return None
 
-# Function to initialize embeddings - COMPLETELY OFFLINE
-def get_embeddings():
-    if "embeddings" not in st.session_state or st.session_state.embeddings is None:
-        try:
-            with st.spinner("📥 Loading embedding model (first time only)..."):
-                # Load the model directly without specifying the device initially
-                embeddings = HuggingFaceEmbeddings(
-                    model_name="sentence-transformers/all-MiniLM-L6-v2",
-                    encode_kwargs={'normalize_embeddings': True}
-                )
-                
-                # Explicitly move the model to the CPU if it's not already there
-                if embeddings.client.device.type != 'cpu':
-                    embeddings.client.to('cpu')
 
-                st.session_state.embeddings = embeddings
-                st.session_state.embeddings_initialized = True
-        except Exception as e:
-            st.error(f"Error initializing HuggingFace embeddings: {e}")
-            return None
-    
-    return st.session_state.embeddings if st.session_state.embeddings_initialized else None
+# Initialize the Gemini LLM for chat/generation with a random API key
+llm = get_llm()
+
 
 def is_out_of_context(answer, current_selected_lang):
     # This function checks if the answer matches the pre-defined contact message
@@ -424,6 +403,7 @@ def is_out_of_context(answer, current_selected_lang):
     ]
     return any(k in answer.lower() for k in keywords)
 
+
 def extract_text_with_pdfplumber(pdf_path):
     text = ""
     try:
@@ -437,7 +417,8 @@ def extract_text_with_pdfplumber(pdf_path):
         return ""
     return text
 
-def initialize_vector_db(pdf_file):
+
+def initialize_vector_db(pdf_file, api_keys):
     # Only initialize if vector_store is not already in session_state
     if "vector_store" not in st.session_state:
         try:
@@ -475,29 +456,36 @@ def initialize_vector_db(pdf_file):
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=300)
             chunks = text_splitter.split_documents([doc])
 
-            # Initialize HuggingFace Embeddings (completely offline)
-            embeddings = get_embeddings()
-            if embeddings is None:
+            # Initialize Gemini Embeddings with better error handling
+            try:
+                st.session_state.embeddings = GoogleGenerativeAIEmbeddings(
+                    model="models/embedding-001",
+                    google_api_key=random.choice(api_keys)
+                )
+            except Exception as e:
+                st.error(f"Error initializing embeddings: {e}")
                 loading_placeholder.empty()
                 return False
 
             # Create the vector store from the document chunks and embeddings
-            st.session_state.vector_store = DocArrayInMemorySearch.from_documents(
-                chunks, embeddings
-            )
+            try:
+                st.session_state.vector_store = DocArrayInMemorySearch.from_documents(
+                    chunks, st.session_state.embeddings
+                )
+            except Exception as e:
+                st.error(f"Error creating vector store: {e}")
+                loading_placeholder.empty()
+                return False
 
             loading_placeholder.empty()  # Clear the loading message
             return True
 
         except Exception as e:
             st.error(f"❌ Error initializing assistant: {str(e)}")
-            if loading_placeholder:
-                loading_placeholder.empty()
+            loading_placeholder.empty()
             return False
     return True  # Already initialized
 
-# Initialize the Groq LLM
-llm = get_llm()
 
 # Initialize chat history
 if "chat_history" not in st.session_state:
@@ -510,7 +498,7 @@ if "message_sent" not in st.session_state:
 # Auto-load PDF for RAG context
 default_pdf_path = "SatyuktQueries.pdf"
 if os.path.exists(default_pdf_path):
-    class DummyFile:
+    class DummyFile:  # Create a dummy class to mimic Streamlit's UploadedFile
         def __init__(self, path):
             self.path = path
 
@@ -518,21 +506,22 @@ if os.path.exists(default_pdf_path):
             with open(self.path, "rb") as f:
                 return f.read()
 
+
     pdf_input_from_user = DummyFile(default_pdf_path)
 
-    if initialize_vector_db(pdf_input_from_user):
+    if initialize_vector_db(pdf_input_from_user, google_api_keys):
         if "initial_greeting_shown" not in st.session_state:
             st.success(
                 "✅ Hi there! 👋 Satyukt Virtual Assistant is ready to assist you! Ask me anything about agriculture, farming, or our services.")
             st.session_state.initial_greeting_shown = True
     else:
-        st.error(f"❌ Could not initialize assistant with '{default_pdf_path}'. Check PDF content.")
+        st.error(f"❌ Could not initialize assistant with '{default_pdf_path}'. Check PDF content or API keys.")
 else:
     st.error(
         f"❌ PDF file '{default_pdf_path}' not found in the project directory. Please ensure it's in the same directory as your Streamlit app.")
 
 # Enhanced Chat Interface
-if "vector_store" in st.session_state and llm:
+if "vector_store" in st.session_state and llm:  # Only show chat if vector store is initialized
     st.markdown("### 💬 Chat with Satyukt Virtual Assistant")
 
     # Display chat history with enhanced styling
@@ -619,7 +608,8 @@ if "vector_store" in st.session_state and llm:
             st.warning("⚠️ Please enter a question before sending.")
 
 else:
-    st.info("🔄 Initializing Satyukt Virtual Assistant... Please wait a moment.")
+    st.info(
+        "🔄 Initializing Satyukt Virtual Assistant... Please wait a moment.")
 
 # Footer
 st.markdown("---")
