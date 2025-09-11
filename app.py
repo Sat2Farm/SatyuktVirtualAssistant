@@ -26,10 +26,10 @@ import time
 
 # Direct API Keys (Replace these with your actual Google API Keys)
 google_api_keys = [
-    "AIzaSyBxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  # Replace with your actual API Key 1
-    "AIzaSyCxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  # Replace with your actual API Key 2
-    "AIzaSyDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  # Replace with your actual API Key 3
-    "AIzaSyExxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"   # Replace with your actual API Key 4
+    "AIzaSyCDiPGoGdtIhKdvZibJm0HmRZ321YR5YTM",  # Replace with your actual API Key 1
+    "AIzaSyBoUe2-U-9iPRUq77klB4uqyvU-huN7V0M",  # Replace with your actual API Key 2
+    "AIzaSyBPiPLkPel4eFaJ5ab4kfZOUU31mEVmsQ4",  # Replace with your actual API Key 3
+    "AIzaSyDIP15XWJfwh0hfmtl_J6H-y23jbJcPrRw"   # Replace with your actual API Key 4
 ]
 
 # Filter out any placeholder values (in case some keys are not replaced)
@@ -622,3 +622,4 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
