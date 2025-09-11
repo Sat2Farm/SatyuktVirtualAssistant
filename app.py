@@ -22,10 +22,22 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
 from langchain_community.vectorstores import DocArrayInMemorySearch
 from langchain_core.documents import Document
-from dotenv import load_dotenv
 import time
 
-load_dotenv()
+# Direct API Keys (Replace these with your actual Google API Keys)
+google_api_keys = [
+    "AIzaSyBPiPLkPel4eFaJ5ab4kfZOUU31mEVmsQ4",  # Replace with your actual API Key 1
+    "AIzaSyCDiPGoGdtIhKdvZibJm0HmRZ321YR5YTM",  # Replace with your actual API Key 2
+    "AIzaSyBoUe2-U-9iPRUq77klB4uqyvU-huN7V0M",  # Replace with your actual API Key 3
+    "AIzaSyDIP15XWJfwh0hfmtl_J6H-y23jbJcPrRw"   # Replace with your actual API Key 4
+]
+
+# Filter out any placeholder values (in case some keys are not replaced)
+google_api_keys = [key for key in google_api_keys if not key.startswith("AIzaSyBxxx")]
+
+if not google_api_keys:
+    st.error("❌ No valid GOOGLE_API_KEYs found. Please replace the placeholder API keys with your actual keys.")
+    st.stop()  # Stop the app if no API keys are found
 
 # Page configuration
 st.set_page_config(
@@ -34,20 +46,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
-# Load multiple Google API Keys from environment variables
-google_api_keys = [
-    os.getenv("GOOGLE_API_KEY_1"),
-    os.getenv("GOOGLE_API_KEY_2"),
-    os.getenv("GOOGLE_API_KEY_3"),
-    os.getenv("GOOGLE_API_KEY_4")
-]
-# Filter out any None values (in case some keys are not set)
-google_api_keys = [key for key in google_api_keys if key]
-
-if not google_api_keys:
-    st.error("❌ No valid GOOGLE_API_KEYs found. Please set at least one in your .env file.")
-    st.stop()  # Stop the app if no API keys are found
 
 # Custom CSS for agriculture theme
 st.markdown(
