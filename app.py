@@ -365,11 +365,12 @@ if "embeddings_initialized" not in st.session_state:
     st.session_state.embeddings_initialized = False
 
 # Function to safely initialize LLM with error handling
+# Function to safely initialize LLM with error handling
 def get_llm():
     if not st.session_state.llm_initialized:
         try:
             st.session_state.llm = ChatGroq(
-                model="llama-3.1-70b-versatile",
+                model="llama3-70b-8192",  # <-- Replaced with a current model
                 api_key=GROQ_API_KEY,
                 temperature=0.7,
                 max_tokens=1000
@@ -378,7 +379,6 @@ def get_llm():
         except Exception as e:
             st.error(f"Error initializing Groq LLM: {e}")
             return None
-    
     return st.session_state.llm if st.session_state.llm_initialized else None
 
 # Function to initialize embeddings - COMPLETELY OFFLINE
@@ -625,3 +625,4 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
