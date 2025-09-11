@@ -5,6 +5,7 @@ import tempfile
 import asyncio
 import sys
 import nest_asyncio
+import torch # Added this import for the embeddings fix
 
 # Fix for event loop issues in Streamlit
 if sys.platform == "win32":
@@ -25,9 +26,9 @@ from langchain_core.documents import Document
 import time
 
 # Direct Groq API Key (Replace with your actual Groq API Key)
-GROQ_API_KEY = "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"  # Replace with your actual Groq API Key
+GROQ_API_KEY = "YOUR_GROQ_API_KEY_HERE"  # Replace this with your actual Groq API Key
 
-if not GROQ_API_KEY or GROQ_API_KEY.startswith("gsk_xxxxxxx"):
+if not GROQ_API_KEY or GROQ_API_KEY == "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":
     st.error("❌ No valid GROQ_API_KEY found. Please replace the placeholder API key with your actual key.")
     st.stop()  # Stop the app if no API key is found
 
@@ -206,10 +207,10 @@ st.markdown(
         font-weight: 600;
     }
 
-     /* Sidebar styling */
-     .css-1d391kg {
-         background: linear-gradient(180deg, #4CAF50 0%, #2E7D32 100%);
-     }
+    /* Sidebar styling */
+    .css-1d391kg {
+        background: linear-gradient(180deg, #4CAF50 0%, #2E7D32 100%);
+    }
 
     .css-1d391kg .css-1v0mbdj {
         color: green;
@@ -365,12 +366,11 @@ if "embeddings_initialized" not in st.session_state:
     st.session_state.embeddings_initialized = False
 
 # Function to safely initialize LLM with error handling
-# Function to safely initialize LLM with error handling
 def get_llm():
     if not st.session_state.llm_initialized:
         try:
             st.session_state.llm = ChatGroq(
-                model="llama3-70b-8192",  # <-- Replaced with a current model
+                model="llama3-70b-8192", # Updated Groq model
                 api_key=GROQ_API_KEY,
                 temperature=0.7,
                 max_tokens=1000
@@ -379,18 +379,25 @@ def get_llm():
         except Exception as e:
             st.error(f"Error initializing Groq LLM: {e}")
             return None
+    
     return st.session_state.llm if st.session_state.llm_initialized else None
 
 # Function to initialize embeddings - COMPLETELY OFFLINE
 def get_embeddings():
-    if not st.session_state.embeddings_initialized:
+    if "embeddings" not in st.session_state or st.session_state.embeddings is None:
         try:
             with st.spinner("📥 Loading embedding model (first time only)..."):
-                st.session_state.embeddings = HuggingFaceEmbeddings(
+                # Load the model directly without specifying the device initially
+                embeddings = HuggingFaceEmbeddings(
                     model_name="sentence-transformers/all-MiniLM-L6-v2",
-                    model_kwargs={'device': 'cpu'},
                     encode_kwargs={'normalize_embeddings': True}
                 )
+                
+                # Explicitly move the model to the CPU if it's not already there
+                if embeddings.client.device.type != 'cpu':
+                    embeddings.client.to('cpu')
+
+                st.session_state.embeddings = embeddings
                 st.session_state.embeddings_initialized = True
         except Exception as e:
             st.error(f"Error initializing HuggingFace embeddings: {e}")
@@ -625,4 +632,3 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
